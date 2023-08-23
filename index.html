@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cajero Automático</title>
+</head>
+<body>
+    <h1>Selecciona una cuenta:</h1>
+    <select id="cuentas">
+        <option value="1">Persona 1</option>
+        <option value="2">Persona 2</option>
+        <option value="3">Persona 3</option>
+    </select>
+    <br><br>
+    <input type="password" id="password" placeholder="Ingresa el password">
+    <button onclick="verificarPassword()">Ingresar</button>
+    
+    <div id="opciones" style="display:none;">
+        <h2>Opciones:</h2>
+        <button onclick="consultarSaldo()">Consultar Saldo</button>
+        <button onclick="ingresarMonto()">Ingresar Monto</button>
+        <button onclick="retirarMonto()">Retirar Monto</button>
+    </div>
+    
+    <div id="resultado" style="display:none;"></div>
+
+    <script>
+        let saldo = 500; // Saldo inicial
+        const saldoMinimo = 10;
+        const saldoMaximo = 990;
+
+        function verificarPassword() {
+            const cuentaSeleccionada = document.getElementById("cuentas").value;
+            const passwordIngresado = document.getElementById("password").value;
+
+            // Simulamos contraseñas para cada cuenta
+            const contraseñas = {
+                "1": "clave1",
+                "2": "clave2",
+                "3": "clave3"
+            };
+
+            if (contraseñas[cuentaSeleccionada] === passwordIngresado) {
+                document.getElementById("opciones").style.display = "block";
+            } else {
+                alert("Contraseña incorrecta. Por favor, inténtalo nuevamente.");
+            }
+        }
+
+        function consultarSaldo() {
+            document.getElementById("resultado").style.display = "block";
+            document.getElementById("resultado").innerHTML = `Saldo actual: $${saldo}`;
+        }
+
+        function ingresarMonto() {
+            const montoIngresado = parseFloat(prompt("Ingresa el monto a ingresar:"));
+            if (!isNaN(montoIngresado)) {
+                if (montoIngresado <= saldoMaximo) {
+                    saldo += montoIngresado;
+                    document.getElementById("resultado").style.display = "block";
+                    document.getElementById("resultado").innerHTML = `Monto ingresado: $${montoIngresado}<br>Saldo actual: $${saldo}`;
+                } else {
+                    alert("El monto ingresado excede el saldo máximo permitido.");
+                }
+            } else {
+                alert("Entrada inválida. Por favor, ingresa un monto válido.");
+            }
+        }
+
+        function retirarMonto() {
+            const montoRetirar = parseFloat(prompt("Ingresa el monto a retirar:"));
+            if (!isNaN(montoRetirar)) {
+                if (montoRetirar <= saldo && saldo - montoRetirar >= saldoMinimo) {
+                    saldo -= montoRetirar;
+                    document.getElementById("resultado").style.display = "block";
+                    document.getElementById("resultado").innerHTML = `Monto retirado: $${montoRetirar}<br>Saldo actual: $${saldo}`;
+                } else {
+                    alert("El monto a retirar no es válido debido a las reglas de negocio.");
+                }
+            } else {
+                alert("Entrada inválida. Por favor, ingresa un monto válido.");
+            }
+        }
+    </script>
+</body>
+</html>
